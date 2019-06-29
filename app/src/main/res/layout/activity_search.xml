@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_activity"
+    android:orientation="vertical"
+    tools:context=".SearchActivity">
+
+    <!-- Search Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/search_bar_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="Search"
+            android:inputType="text"
+            android:paddingStart="@dimen/bg_margin"
+            android:paddingTop="15dp"
+            android:paddingEnd="0dp"
+            android:paddingBottom="15dp"
+            android:textColor="@color/white"
+            android:textColorHighlight="@color/colorPrimaryDark"
+            android:textColorHint="@color/colorPrimaryLight"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/search_bar_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryLight"
+            android:contentDescription="@string/no_image"
+            android:onClick="search"
+            android:padding="15dp"
+            android:src="@drawable/ic_search_24dp" />
+    </LinearLayout>
+
+    <!-- Criteria -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/search_criteria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/bg_margin"
+            android:paddingTop="@dimen/bg_margin"
+            android:paddingEnd="@dimen/bg_margin"
+            android:paddingBottom="0dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/doc_tags"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="@dimen/bg_margin"
+                android:background="@color/colorPrimaryLight"
+                android:padding="5dp">
+
+                <android.support.design.chip.ChipGroup
+                    android:id="@+id/tags_chip_group"
+                    style="@style/Widget.MaterialComponents.ChipGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:chipSpacing="7dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/doc_book"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorPrimaryLight"
+                android:padding="5dp">
+
+                <android.support.design.chip.ChipGroup
+                    android:id="@+id/books_chip_group"
+                    style="@style/Widget.MaterialComponents.ChipGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:chipSpacing="7dp" />
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="-10dp"
+                android:layout_marginTop="@dimen/bg_margin"
+                android:background="@color/colorPrimary"
+                android:fontFamily="sans-serif"
+                android:onClick="clearAll"
+                android:text="@string/add_clear"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryLight"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorPrimaryLight" />
+
+    <ListView
+        android:id="@+id/search_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryLight"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5dp"
+        android:padding="5dp"
+        tools:listitem="@layout/doc_search_view" />
+</LinearLayout>

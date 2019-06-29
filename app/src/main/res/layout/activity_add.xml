@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_activity"
+    tools:context=".AddActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/add_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/no_image"
+            android:onClick="openGallery"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_photo_camera_128dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Doc_Details_Key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/doc_title" />
+
+            <EditText
+                android:id="@+id/add_title"
+                style="@style/Doc_Details_Value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/add_title_hint"
+                android:inputType="textCapSentences"
+                android:maxLength="100" />
+
+            <TextView
+                style="@style/Doc_Details_Key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/doc_desc" />
+
+            <EditText
+                android:id="@+id/add_desc"
+                style="@style/Doc_Details_Value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/add_desc_hint"
+                android:inputType="textMultiLine|textCapSentences" />
+
+            <TextView
+                style="@style/Doc_Details_Key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/doc_tags" />
+
+            <!-- Add Tags -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/bg_margin"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/add_tags"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
+                        android:hint="@string/add_tags_hint"
+                        android:inputType="textCapWords"
+                        android:paddingStart="@dimen/settings_item_padding_se"
+                        android:paddingEnd="@dimen/settings_item_padding_se" />
+
+                    <Button
+                        style="@style/Add_Btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:onClick="addNewTag"
+                        android:text="@string/add_tag_book"
+                        android:textAllCaps="false"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryLight"
+                    android:padding="5dp">
+
+                    <android.support.design.chip.ChipGroup
+                        android:id="@+id/tags_chip_group"
+                        style="@style/Widget.MaterialComponents.ChipGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:chipSpacing="7dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/Doc_Details_Key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/doc_book" />
+
+            <!-- Add Book -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/bg_margin"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/add_book"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
+                        android:hint="@string/add_book_hint"
+                        android:inputType="textCapWords"
+                        android:paddingStart="@dimen/settings_item_padding_se"
+                        android:paddingEnd="@dimen/settings_item_padding_se" />
+
+                    <Button
+                        style="@style/Add_Btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:onClick="addNewBook"
+                        android:text="@string/add_tag_book"
+                        android:textAllCaps="false"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryLight"
+                    android:padding="5dp">
+
+                    <android.support.design.chip.ChipGroup
+                        android:id="@+id/books_chip_group"
+                        style="@style/Widget.MaterialComponents.ChipGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:chipSpacing="7dp"
+                        app:singleSelection="true" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:orientation="horizontal">
+
+                <Button
+                    style="@style/Clear_Btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif"
+                    android:onClick="clearAll"
+                    android:text="@string/add_clear"
+                    android:textAllCaps="false"
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent" />
+
+                <Button
+                    android:id="@+id/add_add_btn"
+                    style="@style/Do_Btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif"
+                    android:onClick="add"
+                    android:text="@string/add_doc"
+                    android:textAllCaps="false"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

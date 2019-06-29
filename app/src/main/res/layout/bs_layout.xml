@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:chainUseRtl="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/bs_preview_tv"
+            style="@style/Bottom_Sheet_Item_Left"
+            android:drawableStart="@drawable/ic_bs_visibility_48dp"
+            android:onClick="bs_preview"
+            android:text="@string/bs_preview" />
+
+        <TextView
+            android:id="@+id/bs_copy_tv"
+            style="@style/Bottom_Sheet_Item_Right"
+            android:drawableStart="@drawable/ic_bs_content_copy_48dp"
+            android:onClick="bs_copy"
+            android:text="@string/bs_copy" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/colorPrimaryLight" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/bs_update_tv"
+            style="@style/Bottom_Sheet_Item_Left"
+            android:drawableStart="@drawable/ic_bs_edit_48dp"
+            android:onClick="bs_update"
+            android:text="@string/bs_update" />
+
+        <TextView
+            android:id="@+id/bs_share_tv"
+            style="@style/Bottom_Sheet_Item_Right"
+            android:drawableStart="@drawable/ic_bs_share_48dp"
+            android:onClick="bs_share"
+            android:text="@string/bs_share" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/colorPrimaryLight" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/bs_archive_tv"
+            style="@style/Bottom_Sheet_Item_Left"
+            android:drawableStart="@drawable/ic_bs_archive_48dp"
+            android:onClick="bs_archive"
+            android:text="@string/bs_archive" />
+
+        <TextView
+            android:id="@+id/bs_delete_tv"
+            style="@style/Bottom_Sheet_Item_Right"
+            android:drawableStart="@drawable/ic_bs_delete_red_48dp"
+            android:onClick="bs_delete"
+            android:text="@string/bs_delete"
+            android:textColor="@color/red" />
+
+    </LinearLayout>
+
+</LinearLayout>

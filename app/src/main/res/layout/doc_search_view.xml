@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/anim_bg_doc"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/doc_search_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="10dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/bg_image"
+        android:contentDescription="@string/doc_image"
+        android:scaleType="fitXY"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/doc_search_book"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@id/doc_search_image"
+        android:gravity="center_vertical"
+        android:text="@string/doc_book" />
+
+    <TextView
+        android:id="@+id/doc_search_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/doc_search_book"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@id/doc_search_image"
+        android:gravity="center_vertical"
+        android:text="@string/doc_title"
+        android:textColor="@color/iconDark"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/doc_search_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/doc_search_title"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@id/doc_search_image"
+        android:gravity="center_vertical"
+        android:text="@string/doc_desc" />
+
+    <TextView
+        android:id="@+id/doc_search_create_ts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/doc_search_desc"
+        android:layout_alignParentEnd="true"
+        android:gravity="center_vertical|end"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp" />
+</RelativeLayout>

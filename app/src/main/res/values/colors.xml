@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#699</color>
+    <color name="colorPrimaryDark">#588</color>
+    <color name="colorAccent">@color/iconLight</color>
+    <!--<color name="colorPrimary">#008577</color>-->
+    <!--<color name="colorPrimaryDark">#00675B</color>-->
+    <!--<color name="colorPrimaryDark">#00574B</color>-->
+    <!--<color name="colorAccent">#D81B60</color>-->
+
+    <color name="iconDark">#292E2B</color>
+    <color name="iconLight">#DDCFB0</color>
+    <color name="white">#FFFFFF</color>
+    <color name="colorPrimaryLight">#C9E9E9</color>
+    <color name="colorStatePressed">#EEE</color>
+    <color name="black">#000</color>
+    <color name="doc_border">#CDD</color>
+    <color name="red">#FF3232</color>
+</resources>
