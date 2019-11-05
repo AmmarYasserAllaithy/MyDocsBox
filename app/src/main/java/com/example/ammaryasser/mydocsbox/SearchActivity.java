@@ -20,6 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.ammaryasser.mydocsbox.data_structure.Book;
+import com.example.ammaryasser.mydocsbox.data_structure.Doc;
+import com.example.ammaryasser.mydocsbox.data_structure.Tag;
+
 import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {
@@ -29,16 +33,19 @@ public class SearchActivity extends AppCompatActivity {
     private LinearLayout criteriaLayout;
     private ListView resultList;
 
-    private ArrayList<DBStructure.Tag> allTags, selectedTags;
-    private ArrayList<DBStructure.Book> allBooks, selectedBooks;
+    private ArrayList<Tag> allTags, selectedTags;
+    private ArrayList<Book> allBooks, selectedBooks;
     private ChipGroup tagsChipGroup, booksChipGroup;
 
     private DBHelper helper;
+    private CommonMethods com;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        com = new CommonMethods(this);
 
         searchBar = findViewById(R.id.search_bar_et);
         searchBar.setOnClickListener(clickListener);
@@ -67,7 +74,7 @@ public class SearchActivity extends AppCompatActivity {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             Chip chip = (Chip) buttonView;
             if (isChecked) {
-                selectedTags.add(new DBStructure.Tag(chip.getId(), chip.getText().toString()));
+                selectedTags.add(new Tag(chip.getId(), chip.getText().toString()));
                 chip.setChipBackgroundColorResource(R.color.colorPrimary);
                 chip.setTextColor(Color.WHITE);
             } else {
@@ -85,7 +92,7 @@ public class SearchActivity extends AppCompatActivity {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             Chip chip = (Chip) buttonView;
             if (isChecked) {
-                selectedBooks.add(new DBStructure.Book(chip.getId(), chip.getText().toString()));
+                selectedBooks.add(new Book(chip.getId(), chip.getText().toString()));
                 chip.setChipBackgroundColorResource(R.color.colorPrimary);
                 chip.setTextColor(Color.WHITE);
             } else {
@@ -103,11 +110,11 @@ public class SearchActivity extends AppCompatActivity {
         tagsChipGroup.removeAllViews();
         allTags = helper.getAllTags();
         if (allTags != null && allTags.size() > 0)
-            for (DBStructure.Tag tag : allTags)
+            for (Tag tag : allTags)
                 addTagToChipGroup(tag);
     }
 
-    private void addTagToChipGroup(DBStructure.Tag tag) {
+    private void addTagToChipGroup(Tag tag) {
         Chip chip = new Chip(tagsChipGroup.getContext());
         chip.setId(tag.getId());
         chip.setText(tag.getName());
@@ -125,11 +132,11 @@ public class SearchActivity extends AppCompatActivity {
         booksChipGroup.removeAllViews();
         allBooks = helper.getAllBooks();
         if (allBooks != null && allBooks.size() > 0)
-            for (DBStructure.Book book : allBooks)
+            for (Book book : allBooks)
                 addBookToChipGroup(book);
     }
 
-    private void addBookToChipGroup(DBStructure.Book book) {
+    private void addBookToChipGroup(Book book) {
         Chip chip = new Chip(booksChipGroup.getContext());
         chip.setId(book.getId());
         chip.setText(book.getTitle());
@@ -184,9 +191,9 @@ public class SearchActivity extends AppCompatActivity {
         resultList.setAdapter(null);
         criteriaLayout.setVisibility(View.GONE);
         String target = searchBar.getText().toString();
-        MainActivity.makeToast(this, "Search for: " + target, 0);
+        com.makeToast("Search for: " + target);
 
-        ArrayList<DBStructure.Doc> result = helper.search(target);
+        ArrayList<Doc> result = helper.search(target);
         if (result != null) resultList.setAdapter(new Adapter(result));
 
         resultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -211,9 +218,9 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     class Adapter extends BaseAdapter {
-        private ArrayList<DBStructure.Doc> resultList;
+        private ArrayList<Doc> resultList;
 
-        Adapter(ArrayList<DBStructure.Doc> resultList) {
+        Adapter(ArrayList<Doc> resultList) {
             this.resultList = resultList;
         }
 
@@ -234,7 +241,7 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            View row = getLayoutInflater().inflate(R.layout.doc_search_view, viewGroup, false);
+            View row = getLayoutInflater().inflate(R.layout.item_doc_search_view, viewGroup, false);
 
             final ImageView image = row.findViewById(R.id.doc_search_image);
             final TextView book = row.findViewById(R.id.doc_search_book);

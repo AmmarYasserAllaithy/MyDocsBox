@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/settings_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_activity"
@@ -44,23 +43,16 @@
             android:background="@color/colorPrimary" />
 
         <!-- General -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/settings_item_padding_se"
-            android:layout_marginTop="@dimen/settings_item_padding_tb"
-            android:layout_marginEnd="@dimen/settings_item_padding_se"
-            android:layout_marginBottom="@dimen/settings_item_padding_tb"
-            android:orientation="vertical">
+        <LinearLayout style="@style/Settings_Group">
 
             <TextView
-                style="@style/Settings_Group_Title"
+                style="@style/Settings_Group.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/set_manage" />
 
             <LinearLayout
-                style="@style/Settings_Row"
+                style="@style/Settings_Row.Done"
                 android:onClick="manageBooks">
 
                 <ImageView
@@ -77,16 +69,16 @@
                         android:text="@string/set_mng_books_key" />
 
                     <TextView
-                        android:id="@+id/set_mng_books"
+                        android:id="@+id/settings_books_no_tv"
                         style="@style/Settings_Item_Value"
-                        android:text="@string/set_mng_books_value" />
+                        android:text="@string/set_books_no" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                style="@style/Settings_Row"
+                style="@style/Settings_Row.Done"
                 android:onClick="manageTags">
 
                 <ImageView
@@ -103,12 +95,13 @@
                         android:text="@string/set_mng_tags_key" />
 
                     <TextView
-                        android:id="@+id/set_mng_tags"
+                        android:id="@+id/settings_tags_no_tv"
                         style="@style/Settings_Item_Value"
-                        android:text="@string/set_mng_tags_value" />
+                        android:text="@string/set_tags_no" />
 
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
 
         <View
@@ -118,23 +111,16 @@
             android:background="@color/colorPrimary" />
 
         <!-- General -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/settings_item_padding_se"
-            android:layout_marginTop="@dimen/settings_item_padding_tb"
-            android:layout_marginEnd="@dimen/settings_item_padding_se"
-            android:layout_marginBottom="@dimen/settings_item_padding_tb"
-            android:orientation="vertical">
+        <LinearLayout style="@style/Settings_Group">
 
             <TextView
-                style="@style/Settings_Group_Title"
+                style="@style/Settings_Group.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/set_general" />
 
             <LinearLayout
-                style="@style/Settings_Row_Done"
+                style="@style/Settings_Row.Done"
                 android:onClick="setLang">
 
                 <ImageView
@@ -182,6 +168,7 @@
 
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
 
         <View
@@ -191,23 +178,16 @@
             android:background="@color/colorPrimary" />
 
         <!-- Appearance -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/settings_item_padding_se"
-            android:layout_marginTop="@dimen/settings_item_padding_tb"
-            android:layout_marginEnd="@dimen/settings_item_padding_se"
-            android:layout_marginBottom="@dimen/settings_item_padding_tb"
-            android:orientation="vertical">
+        <LinearLayout style="@style/Settings_Group">
 
             <TextView
-                style="@style/Settings_Group_Title"
+                style="@style/Settings_Group.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/set_appearance" />
 
             <LinearLayout
-                style="@style/Settings_Row_Done"
+                style="@style/Settings_Row.Done"
                 android:onClick="setViewMode">
 
                 <ImageView
@@ -279,6 +259,7 @@
 
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
 
         <View
@@ -288,62 +269,67 @@
             android:background="@color/colorPrimary" />
 
         <!-- Database -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/settings_item_padding_se"
-            android:layout_marginTop="@dimen/settings_item_padding_tb"
-            android:layout_marginEnd="@dimen/settings_item_padding_se"
-            android:layout_marginBottom="@dimen/settings_item_padding_tb"
-            android:orientation="vertical">
+        <LinearLayout style="@style/Settings_Group">
 
             <TextView
-                style="@style/Settings_Group_Title"
+                style="@style/Settings_Group.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/set_database" />
 
-            <LinearLayout
-                style="@style/Settings_Row_Done"
-                android:onClick="backup">
+            <TextView
+                style="@style/Settings_Row.TV.Done"
+                android:drawableStart="@drawable/ic_set_cloud_upload_48dp"
+                android:text="@string/set_db_backup"
+                android:onClick="backup" />
 
-                <ImageView
-                    style="@style/Settings_Item_Icon"
-                    android:src="@drawable/ic_set_cloud_upload_48dp" />
+            <!--            <LinearLayout-->
+            <!--                style="@style/Settings_Row.Done"-->
+            <!--                android:onClick="backup">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+            <!--                <ImageView-->
+            <!--                    style="@style/Settings_Item_Icon"-->
+            <!--                    android:src="@drawable/ic_set_cloud_upload_48dp" />-->
 
-                    <TextView
-                        style="@style/Settings_Item_Key"
-                        android:layout_height="match_parent"
-                        android:text="@string/set_db_backup" />
+            <!--                <LinearLayout-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    android:orientation="vertical">-->
 
-                </LinearLayout>
-            </LinearLayout>
+            <!--                    <TextView-->
+            <!--                        style="@style/Settings_Item_Key"-->
+            <!--                        android:layout_height="match_parent"-->
+            <!--                        android:text="@string/set_db_backup" />-->
 
-            <LinearLayout
-                style="@style/Settings_Row_Done"
-                android:onClick="restore">
+            <!--                </LinearLayout>-->
+            <!--            </LinearLayout>-->
 
-                <ImageView
-                    style="@style/Settings_Item_Icon"
-                    android:src="@drawable/ic_set_cloud_download_48dp" />
+            <TextView
+                style="@style/Settings_Row.TV.Done"
+                android:drawableStart="@drawable/ic_set_cloud_download_48dp"
+                android:text="@string/set_db_restore"
+                android:onClick="restore" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+            <!--            <LinearLayout-->
+            <!--                style="@style/Settings_Row.Done"-->
+            <!--                android:onClick="restore">-->
 
-                    <TextView
-                        style="@style/Settings_Item_Key"
-                        android:layout_height="match_parent"
-                        android:text="@string/set_db_restore" />
+            <!--                <ImageView-->
+            <!--                    style="@style/Settings_Item_Icon"-->
+            <!--                    android:src="@drawable/ic_set_cloud_download_48dp" />-->
 
-                </LinearLayout>
-            </LinearLayout>
+            <!--                <LinearLayout-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    android:orientation="vertical">-->
+
+            <!--                    <TextView-->
+            <!--                        style="@style/Settings_Item_Key"-->
+            <!--                        android:layout_height="match_parent"-->
+            <!--                        android:text="@string/set_db_restore" />-->
+
+            <!--                </LinearLayout>-->
+            <!--            </LinearLayout>-->
 
             <LinearLayout
                 style="@style/Settings_Row"
@@ -367,6 +353,7 @@
                         android:text="@string/set_db_auto_backup_value" />
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
 
         <View
@@ -376,62 +363,68 @@
             android:background="@color/colorPrimary" />
 
         <!-- Contact -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/settings_item_padding_se"
-            android:layout_marginTop="@dimen/settings_item_padding_tb"
-            android:layout_marginEnd="@dimen/settings_item_padding_se"
-            android:layout_marginBottom="@dimen/settings_item_padding_tb"
-            android:orientation="vertical">
+        <LinearLayout style="@style/Settings_Group">
 
             <TextView
-                style="@style/Settings_Group_Title"
+                style="@style/Settings_Group.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/set_contact" />
 
-            <LinearLayout
-                style="@style/Settings_Row"
-                android:onClick="feedback">
+            <TextView
+                style="@style/Settings_Row.TV"
+                android:drawableStart="@drawable/ic_set_feedback_48dp"
+                android:text="@string/set_feedback"
+                android:onClick="feedback" />
 
-                <ImageView
-                    style="@style/Settings_Item_Icon"
-                    android:src="@drawable/ic_set_feedback_48dp" />
+            <!--            <LinearLayout-->
+            <!--                style="@style/Settings_Row"-->
+            <!--                android:onClick="feedback">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+            <!--                <ImageView-->
+            <!--                    style="@style/Settings_Item_Icon"-->
+            <!--                    android:src="@drawable/ic_set_feedback_48dp" />-->
 
-                    <TextView
-                        style="@style/Settings_Item_Key"
-                        android:layout_height="match_parent"
-                        android:text="@string/set_cont_feedback" />
+            <!--                <LinearLayout-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    android:orientation="vertical">-->
 
-                </LinearLayout>
-            </LinearLayout>
+            <!--                    <TextView-->
+            <!--                        style="@style/Settings_Item_Key"-->
+            <!--                        android:layout_height="match_parent"-->
+            <!--                        android:text="@string/set_feedback" />-->
 
-            <LinearLayout
-                style="@style/Settings_Row"
-                android:onClick="reportBug">
+            <!--                </LinearLayout>-->
+            <!--            </LinearLayout>-->
 
-                <ImageView
-                    style="@style/Settings_Item_Icon"
-                    android:src="@drawable/ic_set_bug_report_48dp" />
+            <TextView
+                style="@style/Settings_Row.TV"
+                android:drawableStart="@drawable/ic_set_bug_report_48dp"
+                android:text="@string/set_report_bug"
+                android:onClick="reportBug" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+            <!--            <LinearLayout-->
+            <!--                style="@style/Settings_Row"-->
+            <!--                android:onClick="reportBug">-->
 
-                    <TextView
-                        style="@style/Settings_Item_Key"
-                        android:layout_height="match_parent"
-                        android:text="@string/set_cont_bug" />
+            <!--                <ImageView-->
+            <!--                    style="@style/Settings_Item_Icon"-->
+            <!--                    android:src="@drawable/ic_set_bug_report_48dp" />-->
 
-                </LinearLayout>
-            </LinearLayout>
+            <!--                <LinearLayout-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    android:orientation="vertical">-->
+
+            <!--                    <TextView-->
+            <!--                        style="@style/Settings_Item_Key"-->
+            <!--                        android:layout_height="match_parent"-->
+            <!--                        android:text="@string/set_report_bug" />-->
+
+            <!--                </LinearLayout>-->
+            <!--            </LinearLayout>-->
+
         </LinearLayout>
 
         <View

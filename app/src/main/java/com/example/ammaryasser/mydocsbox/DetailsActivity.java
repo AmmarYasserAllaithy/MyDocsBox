@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.support.design.chip.Chip;
 import android.support.design.chip.ChipGroup;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.ammaryasser.mydocsbox.data_structure.Doc;
+
 public class DetailsActivity extends AppCompatActivity {
 
-    private static final int COLOR_PRIMARY = Color.parseColor("#008577");
     private ChipGroup tagsChipGroup, booksChipGroup;
 
     @Override
@@ -21,7 +23,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         int docID = getIntent().getIntExtra("docId", -1);
         DBHelper helper = new DBHelper(this);
-        DBStructure.Doc doc = helper.selectDoc(docID);
+        Doc doc = helper.selectDoc(docID);
 
         ImageView image = findViewById(R.id.details_image);
         TextView title_tv = findViewById(R.id.details_title);
@@ -35,7 +37,12 @@ public class DetailsActivity extends AppCompatActivity {
         title_tv.setText(doc.getTitle());
         desc_tv.setText(doc.getDesc());
         create_ts_tv.setText(doc.getCreate_ts());
-        update_ts_tv.setText(doc.getUpdate_ts() == null ? "Never Updated" : doc.getUpdate_ts());
+
+        String updateTs = doc.getUpdate_ts();
+        if (updateTs != null) {
+            update_ts_tv.setVisibility(View.VISIBLE);
+            update_ts_tv.setText(updateTs);
+        }
 
         tagsChipGroup = findViewById(R.id.tags_chip_group);
         booksChipGroup = findViewById(R.id.books_chip_group);
@@ -61,9 +68,8 @@ public class DetailsActivity extends AppCompatActivity {
         Chip chip = new Chip(tagsChipGroup.getContext());
         chip.setText(tagName);
         chip.setCheckedIconEnabled(false);
-        chip.setTextColor(COLOR_PRIMARY);
-        chip.setChipBackgroundColorResource(R.color.white);
-        chip.setRippleColorResource(R.color.colorPrimary);
+        chip.setTextColor(Color.parseColor("#669999"));
+        chip.setChipBackgroundColorResource(R.color.colorPrimaryLight);
         tagsChipGroup.addView(chip);
     }
 
@@ -75,9 +81,8 @@ public class DetailsActivity extends AppCompatActivity {
         Chip chip = new Chip(booksChipGroup.getContext());
         chip.setText(bookTitle);
         chip.setCheckedIconEnabled(false);
-        chip.setTextColor(COLOR_PRIMARY);
-        chip.setChipBackgroundColorResource(R.color.white);
-        chip.setRippleColorResource(R.color.colorPrimary);
+        chip.setTextColor(Color.rgb(255, 255, 255));
+        chip.setChipBackgroundColorResource(R.color.colorPrimary);
         chip.setChipCornerRadius(5);
         booksChipGroup.addView(chip);
     }

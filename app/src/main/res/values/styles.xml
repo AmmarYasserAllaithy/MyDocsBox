@@ -2,13 +2,14 @@
 
     <!-- Base application theme. -->
     <!--
-    Theme.MaterialComponents
-    Theme.MaterialComponents.NoActionBar
-    Theme.MaterialComponents.Light
-    Theme.MaterialComponents.Light.NoActionBar
-    Theme.MaterialComponents.Light.DarkActionBar
+        Theme.MaterialComponents
+        Theme.MaterialComponents.NoActionBar
+        Theme.MaterialComponents.Light
+        Theme.MaterialComponents.Light.NoActionBar
+        Theme.MaterialComponents.Light.DarkActionBar
     -->
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -21,9 +22,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.Fullscreen">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.Fullscreen" parent="AppTheme.NoActionBar">
         <item name="android:windowFullscreen">true</item>
     </style>
 
@@ -33,56 +32,118 @@
 
 
     <style name="Doc_Details_Key">
-        <item name="android:background">@drawable/bg_key</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 
     <style name="Doc_Details_Value">
-        <item name="android:background">@color/colorPrimaryLight</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:layout_marginBottom">@dimen/bg_margin</item>
-        <item name="android:padding">@dimen/settings_item_padding_se</item>
+        <item name="android:padding">@dimen/details_value_padding</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="Do_Btn">
-        <item name="android:background">@drawable/bg_do</item>
-        <item name="android:textColor">@android:color/white</item>
+    <style name="Doc_Details_Ts">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginTop">@dimen/details_value_padding</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:drawablePadding">@dimen/details_value_padding</item>
     </style>
 
-    <style name="Clear_Btn">
-        <item name="android:background">@drawable/bg_clear</item>
-        <item name="android:textColor">@color/colorPrimary</item>
-    </style>
 
     <style name="Add_Btn">
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_add_t_b</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:text">@string/add</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">5dp</item>
     </style>
 
-    <style name="Settings_Group_Title">
+    <style name="Add_ET">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:inputType">textCapWords</item>
+        <item name="android:paddingStart">@dimen/add_t_b_et_padding</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="Add_Image_Ctrl">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/bs_margin_start</item>
+        <item name="android:background">@drawable/bg_add_t_b</item>
+        <item name="android:drawablePadding">@dimen/bs_padding</item>
+        <item name="android:inputType">textCapWords</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">@dimen/bs_padding</item>
+    </style>
+
+
+    <style name="Settings_Group">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/settings_item_padding_se</item>
+        <item name="android:layout_marginTop">@dimen/settings_item_padding_tb</item>
+        <item name="android:layout_marginEnd">@dimen/settings_item_padding_se</item>
+        <item name="android:layout_marginBottom">@dimen/settings_item_padding_tb</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="Settings_Group.Title">
         <item name="android:layout_marginBottom">@dimen/bg_margin</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Settings_Row">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/settings_item_height</item>
-        <item name="android:layout_margin">@dimen/settings_item_margin</item>
-        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:layout_marginTop">@dimen/settings_item_margin</item>
+        <item name="android:layout_marginBottom">@dimen/settings_item_margin</item>
+        <item name="android:layout_marginEnd">0dp</item>
+        <item name="android:padding">@dimen/settings_item_margin</item>
         <item name="android:background">@drawable/anim_bg_set_row</item>
+        <item name="android:orientation">horizontal</item>
     </style>
 
-    <style name="Settings_Row_Done" parent="Settings_Row">
+    <style name="Settings_Row.Done" parent="Settings_Row">
+        <item name="android:background">@drawable/anim_bg_set_row_done</item>
+    </style>
+
+    <style name="Settings_Row.TV" parent="Settings_Row">
+        <item name="android:drawablePadding">@dimen/bs_drw_padding</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="Settings_Row.TV.Done" parent="Settings_Row.TV">
         <item name="android:background">@drawable/anim_bg_set_row_done</item>
     </style>
 
     <style name="Settings_Item_Icon">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginStart">@dimen/settings_item_margin</item>
         <item name="android:layout_marginEnd">@dimen/settings_margin</item>
         <item name="android:contentDescription">@string/no_image</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="Settings_Item_Key" parent="Settings_Item_Value">
@@ -96,23 +157,17 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
+
     <style name="Bottom_Sheet_Item">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:background">@drawable/anim_bg_bs</item>
         <item name="android:drawablePadding">@dimen/bs_drw_padding</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:padding">@dimen/bs_margin</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
-    <style name="Bottom_Sheet_Item_Left" parent="Bottom_Sheet_Item">
-        <item name="android:layout_marginStart">@dimen/bg_margin</item>
-    </style>
-
-    <style name="Bottom_Sheet_Item_Right" parent="Bottom_Sheet_Item">
-        <item name="android:layout_marginEnd">@dimen/bg_margin</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">@dimen/bs_padding</item>
+        <item name="android:paddingStart">@dimen/bs_margin_start</item>
     </style>
 
 </resources>

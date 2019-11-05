@@ -9,11 +9,17 @@ import android.os.Bundle;
 import android.support.design.chip.Chip;
 import android.support.design.chip.ChipGroup;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.ammaryasser.mydocsbox.data_structure.Book;
+import com.example.ammaryasser.mydocsbox.data_structure.Doc;
+import com.example.ammaryasser.mydocsbox.data_structure.Tag;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,32 +27,40 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class AddActivity extends AppCompatActivity {
-    private static final int SELECT_IMAGE_REQUEST = 1010;
-    private static final int COLOR_PRIMARY = Color.parseColor("#008577");
-    private ImageButton imageBtn;
-    private EditText title_et, desc_et, tags_et, book_et;
+    private static final int
+            SELECT_IMAGE_REQUEST = 1010,
+            COLOR_PRIMARY = Color.parseColor("#008577");
+    private ImageView iv;
+    private TextView attachImg_TV, clearImg_TV;
+    private EditText title_ET, desc_ET, tags_ET, book_ET;
     private Uri imageUri = null;
-    private ArrayList<DBStructure.Tag> allTags, selectedTags;
-    private ArrayList<DBStructure.Book> allBooks;
-    private int selectedBookId;
+    private ArrayList<Tag> allTags, selectedTags;
+    private ArrayList<Book> allBooks;
     private ChipGroup tagsChipGroup, booksChipGroup;
     private DBHelper helper;
-    private boolean isUpdate;
-    private int docID;
-    private DBStructure.Doc docToBeUpdated;
+    private boolean typeUpdate;
+    private Doc docToBeUpdated;
     private String editTagsIdx;
-    private int editBookIdx;
+    private int
+            selectedBookId,
+            docID,
+            editBookIdx;
+    private CommonMethods com;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        imageBtn = findViewById(R.id.add_image);
-        title_et = findViewById(R.id.add_title);
-        desc_et = findViewById(R.id.add_desc);
-        tags_et = findViewById(R.id.add_tags);
-        book_et = findViewById(R.id.add_book);
+        com = new CommonMethods(this);
+
+        iv = findViewById(R.id.iv);
+        attachImg_TV = findViewById(R.id.attach_image);
+        clearImg_TV = findViewById(R.id.clear_image);
+        title_ET = findViewById(R.id.add_title);
+        desc_ET = findViewById(R.id.add_desc);
+        tags_ET = findViewById(R.id.add_tags);
+        book_ET = findViewById(R.id.add_book);
 
         //ToDo: Minimize image button height if the src image is the default image.
 
@@ -62,22 +76,22 @@ public class AddActivity extends AppCompatActivity {
 
         helper = new DBHelper(this);
         docToBeUpdated = null;
-        isUpdate = getIntent().getBooleanExtra("update", false);
+        typeUpdate = getIntent().getBooleanExtra("update", false);
 
-        if (isUpdate) {
+        if (typeUpdate) {
             docID = getIntent().getIntExtra("docID", -1);
             if (docID != -1) {
-                Button add_button = findViewById(R.id.add_add_btn);
-                add_button.setText(getString(R.string.bs_update));
                 docToBeUpdated = helper.selectDoc(docID);
                 byte[] imageBytes = docToBeUpdated.getImageBytes();
-                if (imageBytes != null)
-                    imageBtn.setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-                title_et.setText(docToBeUpdated.getTitle());
-                desc_et.setText(docToBeUpdated.getDesc());
+                if (imageBytes != null) {
+                    iv.setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
+                    attachImg_TV.setText(getString(R.string.change_image));
+                    clearImg_TV.setVisibility(View.VISIBLE);
+                }
+                title_ET.setText(docToBeUpdated.getTitle());
+                desc_ET.setText(docToBeUpdated.getDesc());
                 editTagsIdx = docToBeUpdated.getTags();
                 editBookIdx = docToBeUpdated.getBookId();
-//                Log.d("indexes", '.' + editTagsIdx + '.'); ////////
             }
         }
 
@@ -88,20 +102,15 @@ public class AddActivity extends AppCompatActivity {
         String action = intent.getAction();
         String type = intent.getType();
 
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
+        if (Intent.ACTION_SEND.equals(action) && type != null)
             if (type.startsWith("image/")) {
                 Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-                if (imageUri != null) {
-                    this.imageUri = imageUri;
-                    imageBtn.setImageURI(this.imageUri);
-                }
-            }
-            if (type.startsWith("text/")) {
-                String text = intent.getStringExtra(Intent.EXTRA_TEXT);
-                if (text != null) desc_et.setText(text);
-            }
-        }
+                if (imageUri != null) iv.setImageURI(this.imageUri = imageUri);
 
+            } else if (type.startsWith("text/")) {
+                String text = intent.getStringExtra(Intent.EXTRA_TEXT);
+                if (text != null) desc_ET.setText(text);
+            }
     }
 
     private void fillTags() {
@@ -110,13 +119,13 @@ public class AddActivity extends AppCompatActivity {
         allTags = helper.getAllTags();
         helper.close();
         if (allTags != null && allTags.size() > 0)
-            for (DBStructure.Tag tag : allTags)
-                if (isUpdate && docToBeUpdated != null && editTagsIdx.contains(tag.getId() + ""))
+            for (Tag tag : allTags)
+                if (typeUpdate && docToBeUpdated != null && editTagsIdx.contains(tag.getId() + ""))
                     addTagToChipGroup(tag, true);
                 else addTagToChipGroup(tag, false);
     }
 
-    private void addTagToChipGroup(DBStructure.Tag tag, boolean isSelected) {
+    private void addTagToChipGroup(Tag tag, boolean isSelected) {
         Chip chip = new Chip(tagsChipGroup.getContext());
         chip.setId(tag.getId());
         chip.setText(tag.getName());
@@ -137,13 +146,13 @@ public class AddActivity extends AppCompatActivity {
         allBooks = helper.getAllBooks();
         helper.close();
         if (allBooks != null && allBooks.size() > 0)
-            for (DBStructure.Book book : allBooks)
-                if (isUpdate && docToBeUpdated != null && book.getId() == editBookIdx)
+            for (Book book : allBooks)
+                if (typeUpdate && docToBeUpdated != null && book.getId() == editBookIdx)
                     addBookToChipGroup(book, true);
                 else addBookToChipGroup(book, false);
     }
 
-    private void addBookToChipGroup(DBStructure.Book book, boolean isSelected) {
+    private void addBookToChipGroup(Book book, boolean isSelected) {
         Chip chip = new Chip(booksChipGroup.getContext());
         chip.setId(book.getId());
         chip.setText(book.getTitle());
@@ -163,7 +172,7 @@ public class AddActivity extends AppCompatActivity {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             Chip chip = (Chip) buttonView;
             if (isChecked) {
-                selectedTags.add(new DBStructure.Tag(chip.getId(), chip.getText().toString()));
+                selectedTags.add(new Tag(chip.getId(), chip.getText().toString()));
                 chip.setChipBackgroundColorResource(R.color.colorPrimary);
                 chip.setTextColor(Color.WHITE);
             } else {
@@ -209,10 +218,36 @@ public class AddActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_IMAGE_REQUEST);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_add, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_add) add(null);
+        else if (id == R.id.action_clear_all) clearAll();
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && requestCode == SELECT_IMAGE_REQUEST)
-            imageBtn.setImageURI(imageUri = data.getData());
+        if (resultCode == Activity.RESULT_OK && requestCode == SELECT_IMAGE_REQUEST) {
+            iv.setImageURI(imageUri = data.getData());
+            attachImg_TV.setText(getString(R.string.change_image));
+            clearImg_TV.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -220,45 +255,47 @@ public class AddActivity extends AppCompatActivity {
         startActivity(new Intent(this, MainActivity.class));
     }
 
+
     public void addNewTag(View view) {
-        String tag = tags_et.getText().toString();
+        String tag = tags_ET.getText().toString();
         if (!tag.matches("[ ]*")) {
             DBHelper helper = new DBHelper(this);
             if (helper.insertTag(tag)) {
-                DBStructure.Tag newTag = helper.getLastTag();
+                Tag newTag = helper.getLastTag();
                 if (allTags != null) allTags.add(newTag);
                 else {
                     allTags = new ArrayList<>();
                     allTags.add(newTag);
                 }
                 addTagToChipGroup(newTag, true);
-                tags_et.setText("");
-            } else MainActivity.makeToast(this, "Can't insert into Tags Table", 1);
-        } else MainActivity.makeToast(this, getString(R.string.valid_tag), 1);
+                tags_ET.setText("");
+            } else com.makeToast("Can't insert into Tags Table", 1);
+        } else com.makeToast(getString(R.string.valid_tag), 1);
     }
 
     public void addNewBook(View view) {
-        String book = book_et.getText().toString();
+        String book = book_ET.getText().toString();
         if (!book.matches("[ ]*")) {
             DBHelper helper = new DBHelper(this);
-            if (helper.insertBook(book, null, null)) {
-                DBStructure.Book newBook = helper.getLastBook();
+            if (helper.insertBook(book)) {
+                Book newBook = helper.getLastBook();
                 if (allBooks != null) allBooks.add(newBook);
                 else {
                     allBooks = new ArrayList<>();
                     allBooks.add(newBook);
                 }
                 addBookToChipGroup(newBook, true);
-                book_et.setText("");
-            } else MainActivity.makeToast(this, "Can't insert into Books Table", 1);
-        } else MainActivity.makeToast(this, getString(R.string.valid_book), 1);
+                book_ET.setText("");
+            } else com.makeToast("Can't insert into Books Table", 1);
+        } else com.makeToast(getString(R.string.valid_book), 1);
     }
 
+    //ToDo: remove image when update from DB
     public void add(View view) {
-        String title = title_et.getText().toString();
-        String desc = desc_et.getText().toString();
+        String title = title_ET.getText().toString();
+        String desc = desc_ET.getText().toString();
         byte[] imageBytes = imageUri == null ? null : imageToBytes(imageUri);
-        if (isUpdate)
+        if (typeUpdate)
             imageBytes = imageUri == null ? docToBeUpdated.getImageBytes() : imageToBytes(imageUri);
 
         if (!(title.matches("[ ]*") || desc.matches("[ ]*")))
@@ -269,24 +306,21 @@ public class AddActivity extends AppCompatActivity {
                         tagsIdx.append(selectedTags.get(idx).getId()).append(" ");
 
                     boolean executed;
-                    if (isUpdate)
+                    if (typeUpdate)
                         executed = helper.updateDoc(docID, selectedBookId, title, desc, tagsIdx.toString(), imageBytes);
                     else
                         executed = helper.insertDoc(selectedBookId, title, desc, tagsIdx.toString(), imageBytes);
                     helper.close();
 
                     if (executed) {
-                        if (isUpdate) startActivity(getParentActivityIntent());
+                        if (typeUpdate) startActivity(getParentActivityIntent());
                         else startActivity(new Intent(this, MainActivity.class));
-                        clear();
+                        clearAll();
                         imageUri = null;
                     }
-                } else
-                    MainActivity.makeToast(this, getString(R.string.select_book), 1);
-            else
-                MainActivity.makeToast(this, getString(R.string.select_tag), 1);
-        else
-            MainActivity.makeToast(this, getString(R.string.valid_msg), 1);
+                } else com.makeToast(getString(R.string.select_book), 1);
+            else com.makeToast(getString(R.string.select_tag), 1);
+        else com.makeToast(getString(R.string.valid_msg), 1);
 
     }
 
@@ -304,16 +338,19 @@ public class AddActivity extends AppCompatActivity {
         return null;
     }
 
-    public void clearAll(View view) {
-        clear();
+    public void clearImage(View view) {
+        imageUri = null;
+        iv.setImageDrawable(null);
+        attachImg_TV.setText(getString(R.string.attach_image));
+        clearImg_TV.setVisibility(View.GONE);
     }
 
-    private void clear() {
-        imageBtn.setImageResource(R.drawable.ic_photo_camera_128dp);
-        title_et.setText("");
-        desc_et.setText("");
-        tags_et.setText("");
-        book_et.setText("");
+    private void clearAll() {
+        clearImage(null);
+        title_ET.setText("");
+        desc_ET.setText("");
+        tags_ET.setText("");
+        book_ET.setText("");
         uncheckAllChips(tagsChipGroup);
         uncheckAllChips(booksChipGroup);
         selectedTags = new ArrayList<>();

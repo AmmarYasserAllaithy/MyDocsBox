@@ -33,14 +33,13 @@
             android:textSize="20sp" />
 
         <ImageButton
-            android:id="@+id/search_bar_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/colorPrimaryLight"
             android:contentDescription="@string/no_image"
             android:onClick="search"
             android:padding="15dp"
-            android:src="@drawable/ic_search_24dp" />
+            android:src="@drawable/ic_search" />
     </LinearLayout>
 
     <!-- Criteria -->
@@ -113,7 +112,7 @@
                 android:background="@color/colorPrimary"
                 android:fontFamily="sans-serif"
                 android:onClick="clearAll"
-                android:text="@string/add_clear"
+                android:text="@string/clear_all"
                 android:textAllCaps="false"
                 android:textColor="@color/colorPrimaryLight"
                 android:textSize="20sp" />
@@ -132,6 +131,7 @@
         android:background="@color/colorPrimaryLight"
         android:divider="@android:color/transparent"
         android:dividerHeight="5dp"
+        android:scrollbarStyle="outsideOverlay"
         android:padding="5dp"
-        tools:listitem="@layout/doc_search_view" />
+        tools:listitem="@layout/item_doc_search_view" />
 </LinearLayout>

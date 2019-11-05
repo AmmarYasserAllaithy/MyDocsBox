@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.ammaryasser.mydocsbox.AddActivity">
+
+    <item
+        android:id="@+id/action_clear_all"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_menu_clear_all_white_24dp"
+        android:title="@string/add_menu_clear_all"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_add"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_menu_done_white_24dp"
+        android:title="@string/add_menu_done"
+        app:showAsAction="ifRoom" />
+
+</menu>

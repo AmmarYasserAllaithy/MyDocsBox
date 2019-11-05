@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_add_a_photo_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_clear_all_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,11 +33,11 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="autoMirrored" value="true" />
-                            <entry key="color" value="669999" />
-                            <entry key="outputName" value="ic_add_a_photo_24dp" />
-                            <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="D:\#\#Downloads\Chrome\bookshelf_icon-icons-com_54414.svg" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="ic_attachment" />
+                            <entry key="sourceFile" value="D:\0\Downloads\Brave\attachment.svg" />
                           </map>
                         </option>
                       </PersistentState>

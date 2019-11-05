@@ -7,23 +7,35 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.ammaryasser.mydocsbox.data_structure.Book;
+import com.example.ammaryasser.mydocsbox.data_structure.Tag;
+
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
     private static final int SELECT_DB_FILE_REQUEST = 1;
     private SharedPreferences preferences;
-    private TextView vMode_TV, lang_TV;
+    private TextView booksNo, tagsNo, vMode_TV, lang_TV;
+    private CommonMethods com;
+    private DBHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +43,17 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         preferences = getSharedPreferences(MainActivity.MyPrefsBox, Context.MODE_PRIVATE);
+        com = new CommonMethods(this);
+        helper = new DBHelper(this);
 
+        booksNo = findViewById(R.id.settings_books_no_tv);
+        tagsNo = findViewById(R.id.settings_tags_no_tv);
         lang_TV = findViewById(R.id.set_gen_lang);
-        lang_TV.setText(getString(R.string.set_gen_lang_value));
         vMode_TV = findViewById(R.id.set_apr_view_mode);
+
+        booksNo.setText(getString(R.string.set_books_no, helper.getBooksNo()));
+        tagsNo.setText(getString(R.string.set_tags_no, helper.getTagsNo()));
+        lang_TV.setText(getString(R.string.set_gen_lang_value));
         vMode_TV.setText(MainActivity.viewMode_ID == 0 ? getString(R.string.view_mode_compact) : getString(R.string.view_mode_informative));
     }
 
@@ -51,12 +70,11 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void manageBooks(View view) {
-        makeToast("Books");
-        makeDialog("Manage Books", "Ur Books number = 4", "Test Dialog NOTES");
+        showDialog("Books");
     }
 
     public void manageTags(View view) {
-        makeToast("Tags");
+        showDialog("Tags");
     }
 
     public void setLang(View view) {
@@ -67,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void setDateFormat(View view) {
-        makeToast("Date Format");
+        com.makeToast("Date Format");
     }
 
     public void setViewMode(View view) {
@@ -78,19 +96,19 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void setTheme(View view) {
-        makeToast("Theme");
+        com.makeToast("Theme");
     }
 
     public void setFont(View view) {
-        makeToast("Font");
+        com.makeToast("Font");
     }
 
     public void backup(View view) {
         DBHelper dbHelper = new DBHelper(this);
         String path = dbHelper.exportDatabase();
         if (path != null)
-            MainActivity.makeToast(this, "DB Backup Successfully\n" + path, 0);
-        else MainActivity.makeToast(this, "Backup Failed", 0);
+            com.makeToast("DB Backup Successfully\n" + path, 0);
+        else com.makeToast("Backup Failed", 0);
     }
 
     public void restore(View view) {
@@ -101,23 +119,19 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void autoBackup(View view) {
-        makeToast("Auto Backup");
+        com.makeToast("Auto Backup");
     }
 
     public void feedback(View view) {
-        makeToast("Feedback");
+        com.makeToast("Feedback");
     }
 
     public void reportBug(View view) {
-        makeToast("Report A Bug");
+        com.makeToast("Report A Bug");
     }
 
     public void gotoAbout(View view) {
         startActivity(new Intent(this, AboutActivity.class));
-    }
-
-    private void makeToast(String layout) {
-        MainActivity.makeToast(this, layout + " was clicked", 0);
     }
 
     public void setLocale(String lang) {
@@ -142,10 +156,10 @@ public class SettingsActivity extends AppCompatActivity {
                 DBHelper dbHelper = new DBHelper(this);
                 boolean imported = dbHelper.importDatabase(backupPath);
                 if (imported)
-                    MainActivity.makeToast(this, "DB Restored Successfully", 0);
-                else MainActivity.makeToast(this, "Restore Failed", 0);
+                    com.makeToast("DB Restored Successfully", 0);
+                else com.makeToast("Restore Failed", 0);
             } else
-                MainActivity.makeToast(this, "Invalid Database File", 0);
+                com.makeToast("Invalid Database File", 0);
         }
     }
 
@@ -162,23 +176,177 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    public void makeDialog(String title, String message, String notes) {
-        View dialog = getLayoutInflater().inflate(R.layout.dialog, null);
+//    public void makeDialog(String title, String message, String notes) {
+//        View dialog = getLayoutInflater().inflate(R.layout.dialog, null);
+//
+//        TextView titleTV = dialog.findViewById(R.id.dialog_title);
+//        TextView messageTV = dialog.findViewById(R.id.dialog_message);
+//        TextView notesTV = dialog.findViewById(R.id.dialog_notes);
+//        Button okBtn = dialog.findViewById(R.id.dialog_ok);
+//        Button cancelBtn = dialog.findViewById(R.id.dialog_cancel);
+//
+//        titleTV.setText(title);
+//        messageTV.setText(message);
+//        notesTV.setText(notes);
+//
+//        final AlertDialog.Builder dialogBuilder = new AlertDialog
+//                .Builder(this)
+////                .setCancelable(false)
+//                .setView(dialog);
+//
+//        final AlertDialog alertDialog = dialogBuilder.create();
+//        Objects.requireNonNull(alertDialog
+//                .getWindow())
+//                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+////                .setBackgroundDrawableResource(android.R.color.transparent);
+//
+//        dialogBuilder.show();
+//
+//        okBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(SettingsActivity.this, "OK", Toast.LENGTH_SHORT).show();
+////                alertDialog.dismiss();
+////                alertDialog.hide();
+//            }
+//        });
+//        cancelBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(SettingsActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+////                alertDialog.dismiss();
+//            }
+//        });
+//
+//    }
 
-        TextView titleTV = dialog.findViewById(R.id.dialog_title);
-        TextView messageTV = dialog.findViewById(R.id.dialog_message);
-        TextView notesTV = dialog.findViewById(R.id.dialog_notes);
+    public void showDialog(String type) {
+        View view = getLayoutInflater().inflate(R.layout.list_manage, null);
 
-        titleTV.setText(title);
-        messageTV.setText(message);
-        notesTV.setText(notes);
+        TextView title = view.findViewById(R.id.manage_title);
+        title.setText(type);
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setView(dialog);
+        ListView listView = view.findViewById(R.id.manage_listView);
+        listView.setAdapter(type.equalsIgnoreCase("Books") ?
+                new BookAdapter(this, new DBHelper(this).getAllBooks()) :
+                new TagAdapter(this, new DBHelper(this).getAllTags())
+        );
 
-        AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertDialog.show();
+        new AlertDialog.Builder(this).setView(view).show();
+    }
 
+}
+
+class BookAdapter extends ArrayAdapter<Book> {
+
+    private DBHelper helper = new DBHelper(getContext());
+
+    public BookAdapter(@NonNull Context context, ArrayList<Book> books) {
+        super(context, 0, books);
+    }
+
+    @NonNull
+    @Override
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        View view = convertView;
+        if (convertView == null)
+            view = LayoutInflater
+                    .from(getContext())
+                    .inflate(R.layout.item_manage, parent, false);
+
+        TextView title = view.findViewById(R.id.item_manage_title);
+        ImageButton editIB = view.findViewById(R.id.item_manage_edit);
+        ImageButton deleteIB = view.findViewById(R.id.item_manage_delete);
+
+        int id = -1;
+        final Book book = getItem(position);
+
+        if (book != null) {
+            id = book.getId();
+            title.setText(book.getTitle());
+        }
+        final int ID = id;
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), ID + " - " + helper.selectBook(ID).getId(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        editIB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Edit: " + helper.selectBook(ID).getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        deleteIB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //ToDo: check if book used or not..
+                boolean del = helper.deleteBook(ID);
+                Toast.makeText(getContext(), del ? "Deleted" : "Can't delete", Toast.LENGTH_SHORT).show();
+                //ToDo: delete from / refill listview
+//                notifyDataSetChanged();
+            }
+        });
+
+        view.setBackgroundResource(R.drawable.anim_bg_set_row);
+        return view;
+    }
+}
+
+class TagAdapter extends ArrayAdapter<Tag> {
+
+    private DBHelper helper = new DBHelper(getContext());
+
+    public TagAdapter(@NonNull Context context, ArrayList<Tag> tags) {
+        super(context, 0, tags);
+    }
+
+    @NonNull
+    @Override
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        View view = convertView;
+        if (convertView == null)
+            view = LayoutInflater
+                    .from(getContext())
+                    .inflate(R.layout.item_manage, parent, false);
+
+        TextView name = view.findViewById(R.id.item_manage_title);
+        ImageButton editIB = view.findViewById(R.id.item_manage_edit);
+        ImageButton deleteIB = view.findViewById(R.id.item_manage_delete);
+
+        int id = -1;
+        final Tag tag = getItem(position);
+
+        if (tag != null) {
+            id = tag.getId();
+            name.setText(tag.getName());
+        }
+        final int ID = id;
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), ID + " - " + helper.selectTag(ID).getId(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        editIB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Edit: " + helper.selectTag(ID).getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        deleteIB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //ToDo: check if tag used or not..
+                boolean del = helper.deleteTag(ID);
+                Toast.makeText(getContext(), del ? "Deleted" : "Can't delete", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        view.setBackgroundResource(R.drawable.anim_bg_set_row);
+        return view;
     }
 }

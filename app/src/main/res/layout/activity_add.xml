@@ -13,16 +13,38 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/add_image"
+        <!-- Image -->
+        <ImageView
+            android:id="@+id/iv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
             android:contentDescription="@string/no_image"
-            android:onClick="openGallery"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_photo_camera_128dp" />
+            android:scaleType="fitXY" />
+
+        <!-- Image Ctrl -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/attach_image"
+                style="@style/Add_Image_Ctrl"
+                android:drawableStart="@drawable/ic_attachment"
+                android:onClick="openGallery"
+                android:text="@string/attach_image" />
+
+            <TextView
+                android:id="@+id/clear_image"
+                style="@style/Add_Image_Ctrl"
+                android:drawableStart="@drawable/ic_bs_delete"
+                android:onClick="clearImage"
+                android:text="@string/clear_image"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,40 +52,18 @@
             android:layout_margin="10dp"
             android:orientation="vertical">
 
-            <TextView
-                style="@style/Doc_Details_Key"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/doc_title" />
-
             <EditText
                 android:id="@+id/add_title"
                 style="@style/Doc_Details_Value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:hint="@string/add_title_hint"
                 android:inputType="textCapSentences"
                 android:maxLength="100" />
 
-            <TextView
-                style="@style/Doc_Details_Key"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/doc_desc" />
-
             <EditText
                 android:id="@+id/add_desc"
                 style="@style/Doc_Details_Value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:hint="@string/add_desc_hint"
                 android:inputType="textMultiLine|textCapSentences" />
-
-            <TextView
-                style="@style/Doc_Details_Key"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/doc_tags" />
 
             <!-- Add Tags -->
             <LinearLayout
@@ -79,31 +79,18 @@
 
                     <EditText
                         android:id="@+id/add_tags"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@android:color/transparent"
-                        android:gravity="center_vertical"
-                        android:hint="@string/add_tags_hint"
-                        android:inputType="textCapWords"
-                        android:paddingStart="@dimen/settings_item_padding_se"
-                        android:paddingEnd="@dimen/settings_item_padding_se" />
+                        style="@style/Add_ET"
+                        android:hint="@string/add_tags_hint" />
 
                     <Button
                         style="@style/Add_Btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif"
-                        android:onClick="addNewTag"
-                        android:text="@string/add_tag_book"
-                        android:textAllCaps="false"
-                        android:textSize="18sp" />
+                        android:onClick="addNewTag" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorPrimaryLight"
+                    android:background="@drawable/bg_chip_group"
                     android:padding="5dp">
 
                     <android.support.design.chip.ChipGroup
@@ -117,17 +104,10 @@
 
             </LinearLayout>
 
-            <TextView
-                style="@style/Doc_Details_Key"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/doc_book" />
-
             <!-- Add Book -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/bg_margin"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -137,31 +117,18 @@
 
                     <EditText
                         android:id="@+id/add_book"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@android:color/transparent"
-                        android:gravity="center_vertical"
-                        android:hint="@string/add_book_hint"
-                        android:inputType="textCapWords"
-                        android:paddingStart="@dimen/settings_item_padding_se"
-                        android:paddingEnd="@dimen/settings_item_padding_se" />
+                        style="@style/Add_ET"
+                        android:hint="@string/add_book_hint" />
 
                     <Button
                         style="@style/Add_Btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif"
-                        android:onClick="addNewBook"
-                        android:text="@string/add_tag_book"
-                        android:textAllCaps="false"
-                        android:textSize="18sp" />
+                        android:onClick="addNewBook" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorPrimaryLight"
+                    android:background="@drawable/bg_chip_group"
                     android:padding="5dp">
 
                     <android.support.design.chip.ChipGroup
@@ -174,42 +141,6 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <!-- Buttons -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:orientation="horizontal">
-
-                <Button
-                    style="@style/Clear_Btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="sans-serif"
-                    android:onClick="clearAll"
-                    android:text="@string/add_clear"
-                    android:textAllCaps="false"
-                    android:textSize="20sp" />
-
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent" />
-
-                <Button
-                    android:id="@+id/add_add_btn"
-                    style="@style/Do_Btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="sans-serif"
-                    android:onClick="add"
-                    android:text="@string/add_doc"
-                    android:textAllCaps="false"
-                    android:textSize="20sp" />
             </LinearLayout>
 
         </LinearLayout>

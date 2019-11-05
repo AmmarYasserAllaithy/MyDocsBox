@@ -3,6 +3,7 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <solid android:color="@color/colorPrimaryLight" />
+            <corners android:radius="@dimen/bs_item_radius" />
         </shape>
     </item>
 </selector>

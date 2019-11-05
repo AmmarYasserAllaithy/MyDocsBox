@@ -21,9 +21,9 @@ public class ProfileActivity extends AppCompatActivity {
         post_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final View doc = getLayoutInflater().inflate(R.layout.deaf_post, null);
+                final View doc = getLayoutInflater().inflate(R.layout.item_post, null);
                 final TextView post_content = doc.findViewById(R.id.post_content_tv);
-                post_content.setText(post_et.getText().toString());
+                post_content.setText("Fuck My Life");//post_et.getText().toString());
                 posts_layout.addView(doc);
                 post_et.setText("");
             }

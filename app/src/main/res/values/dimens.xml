@@ -2,15 +2,23 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="fab_margin">20dp</dimen>
     <dimen name="doc_image_margin">10dp</dimen>
+    <dimen name="doc_radius">10dp</dimen>
     <dimen name="bg_margin">10dp</dimen>
+    <dimen name="add_t_b_et_padding">10dp</dimen>
+    <dimen name="add_t_b_btn_radius">5dp</dimen>
     <dimen name="settings_item_padding_se">10dp</dimen>
     <dimen name="settings_item_padding_tb">5dp</dimen>
-    <dimen name="settings_item_height">60dp</dimen>
+    <dimen name="settings_item_height">70dp</dimen>
     <dimen name="settings_item_margin">5dp</dimen>
-    <dimen name="settings_key_value_height">30dp</dimen>
     <dimen name="settings_margin">15dp</dimen>
-    <dimen name="doc_radius">10dp</dimen>
+    <dimen name="settings_key_value_height">30dp</dimen>
     <dimen name="dialog_radius">15dp</dimen>
     <dimen name="bs_drw_padding">15dp</dimen>
-    <dimen name="bs_margin">10dp</dimen>
+    <dimen name="bs_padding">10dp</dimen>
+    <dimen name="bs_margin_start">15dp</dimen>
+    <dimen name="bs_item_radius">50dp</dimen>
+    <dimen name="details_value_padding">10dp</dimen>
+    <dimen name="details_ts_m_p">4dp</dimen>
+    <dimen name="item_book_padding_s_e">5dp</dimen>
+    <dimen name="item_book_padding_t_b">12dp</dimen>
 </resources>

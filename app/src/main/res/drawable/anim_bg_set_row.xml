@@ -2,7 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <corners android:radius="@dimen/doc_radius" />
             <solid android:color="@color/colorStatePressed" />
         </shape>
     </item>

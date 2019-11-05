@@ -1,13 +1,20 @@
 package com.example.ammaryasser.mydocsbox;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,9 +23,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,18 +41,23 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.ammaryasser.mydocsbox.data_structure.Book;
+import com.example.ammaryasser.mydocsbox.data_structure.Doc;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
+
 
 public class MainActivity extends AppCompatActivity {
-    private static final int themeLightColor = Color.parseColor("#DDEEEE");
+    private static final int PERMISSIONS_REQUEST = 1001;
+    private static final int COLOR_PRIMARY_LIGHT = Color.parseColor("#DDEEEE");
     public static final String MyPrefsBox = "MyPrefsBox",
             LANG = "LANG",
             DATE_FORMAT = "DATE_FORMAT",
@@ -56,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
     private static SharedPreferences preferences;
     private DBHelper dbHelper;
     private static BottomSheet bottomSheet;
+
+    public static Context CONTEXT;
+    private CommonMethods com;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -72,14 +89,29 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
-    private static ArrayList<DBStructure.Book> booksList;
+    private static ArrayList<Book> booksList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //ToDo: Take Permission to run on Android 6.0 or above
+        CONTEXT = this;
+        com = new CommonMethods(this);
+
+        //Take Permissions
+        final String[] permissions = {
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.INTERNET
+        };
+
+        for (String permission : permissions)
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST);
+//        com.makeToast("Permissions Granted", 1);
+
 
         preferences = getSharedPreferences(MyPrefsBox, Context.MODE_PRIVATE);
         lang_ID = preferences.getInt(LANG, 0);  //ToDo: Not completed yet
@@ -101,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        tabLayout.setSelectedTabIndicatorColor(themeLightColor);
+        tabLayout.setSelectedTabIndicatorColor(COLOR_PRIMARY_LIGHT);
         tabLayout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -123,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
         booksList = dbHelper.getAllBooks();
         if (booksList != null) {
-            for (DBStructure.Book book : booksList) {
+            for (Book book : booksList) {
                 TabLayout.Tab tab = tabLayout.newTab();
                 tab.setText(book.getTitle());
                 tab.setContentDescription(book.getTitle());
@@ -152,10 +184,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (exit == 0) {
-            makeToast(this, "Click again to exit", 0);
+            com.makeToast("Click again to exit", 0);
             exit++;
         } else {
-            new DBHelper(this).onExitBackup();
+            new DBHelper(this).backup();
             finish();
             moveTaskToBack(true);
         }
@@ -167,6 +199,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 2000);
     }
+
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        new DBHelper(this).backup();
+////        finish();
+//        moveTaskToBack(true);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -228,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
             assert args != null;
             int currentTabIdx = args.getInt(ARG_SECTION_NUMBER);
             int bookId = booksList.get(currentTabIdx - 1).getId();
-            ArrayList<DBStructure.Doc> docs = new DBHelper(getContext()).getAllDocs(bookId);
+            ArrayList<Doc> docs = new DBHelper(getContext()).getDocsInBook(bookId);
             if (docs != null) listView.setAdapter(new Adapter(docs));
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -240,16 +280,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            View view = getLayoutInflater().inflate(R.layout.list_footer, null);
+            View view = getLayoutInflater().inflate(R.layout.item_list_footer, null);
             listView.addFooterView(view, null, false);
 
             return rootView;
         }
 
         class Adapter extends BaseAdapter {
-            private ArrayList<DBStructure.Doc> docsList;
+            private ArrayList<Doc> docsList;
 
-            Adapter(ArrayList<DBStructure.Doc> docsList) {
+            Adapter(ArrayList<Doc> docsList) {
                 this.docsList = docsList;
             }
 
@@ -270,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public View getView(int i, View view, ViewGroup viewGroup) {
-                int layout = viewMode_ID == 0 ? R.layout.doc_compact_view : R.layout.doc_informative_view;
+                int layout = viewMode_ID == 0 ? R.layout.item_doc_compact_view : R.layout.item_doc_informative_view;
                 @SuppressLint("ViewHolder")
                 View row = getLayoutInflater().inflate(layout, viewGroup, false);
 
@@ -281,10 +321,17 @@ public class MainActivity extends AppCompatActivity {
                 byte[] imageBytes = docsList.get(i).getImageBytes();
                 if (imageBytes != null) {
                     image.setVisibility(View.VISIBLE);
+
                     RequestBuilder<Drawable> requestBuilder = Glide
-                            .with(getContext())
-                            .load(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-                    if (viewMode_ID == 0) requestBuilder.circleCrop();
+                            .with(Objects.requireNonNull(getContext()))
+                            .setDefaultRequestOptions(new RequestOptions().override(540, 960))
+                            .load(
+//                                    getRoundedCornerBitmap(
+                                    BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length)
+//                                    , 100)
+                            );
+                    if (viewMode_ID == 0)
+                        requestBuilder.centerCrop(); //.fitCenter(); //.circleCrop();
                     requestBuilder.into(image);
                 }
 
@@ -299,6 +346,24 @@ public class MainActivity extends AppCompatActivity {
                 return row;
             }
         }
+    }
+
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx) {
+        int w = bitmap.getWidth();
+        int h = bitmap.getHeight();
+        Bitmap output = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, w, h);
+        final RectF rectF = new RectF(rect);
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(0xff424242);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
     }
 
     /**
@@ -337,23 +402,24 @@ public class MainActivity extends AppCompatActivity {
      */
     private static int bs_Doc_ID = -1;
 
-    public void bs_preview(View view) {
+    public void bs_view(View view) {
         startActivity(new Intent(this, DetailsActivity.class).putExtra("docId", bs_Doc_ID));
         bottomSheet.dismiss();
     }
 
     public void bs_copy(View view) {
-        DBStructure.Doc doc = dbHelper.selectDoc(bs_Doc_ID);
+        Doc doc = dbHelper.selectDoc(bs_Doc_ID);
         String docDetails = String.format("%s%n%n%s%n%n%s%n%n%s",
-                doc.getTitle(), doc.getDesc(), doc.getCreate_ts(), doc.getUpdate_ts());
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("doc details", docDetails);
-        clipboard.setPrimaryClip(clip);
-        makeToast(this, "Copied!", 0);
+                doc.getTitle(),
+                doc.getDesc(),
+                doc.getCreate_ts(),
+                doc.getUpdate_ts()
+        );
+        com.copyToClipboard("doc details", docDetails);
         bottomSheet.dismiss();
     }
 
-    public void bs_update(View view) {
+    public void bs_edit(View view) {
         Intent intent = new Intent(this, AddActivity.class);
         intent.putExtra("update", true).putExtra("docID", bs_Doc_ID);
         startActivity(intent);
@@ -361,19 +427,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bs_share(View view) {
-        makeToast(this, "Share was clicked", 0);
+        com.makeToast("Share was clicked", 0);
         bottomSheet.dismiss();
     }
 
     public void bs_archive(View view) {
-        makeToast(this, "Archive was clicked", 0);
+        com.makeToast("Archive was clicked", 0);
         bottomSheet.dismiss();
     }
 
     public void bs_delete(View view) {
         boolean isDeleted = dbHelper.deleteDoc(bs_Doc_ID);
         if (isDeleted) {
-            makeToast(this, "Deleted!", 0);
+            com.makeToast("Deleted!", 0);
             recreate();
         }
         bottomSheet.dismiss();
@@ -382,7 +448,10 @@ public class MainActivity extends AppCompatActivity {
     public static class BottomSheet extends BottomSheetDialogFragment {
         @Nullable
         @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        public View onCreateView(
+                @NonNull LayoutInflater inflater,
+                @Nullable ViewGroup container,
+                @Nullable Bundle savedInstanceState) {
             return inflater.inflate(R.layout.bs_layout, container, false);
         }
     }
@@ -390,10 +459,6 @@ public class MainActivity extends AppCompatActivity {
     public static String getDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy, HH:mm:ss", Locale.getDefault());
         return dateFormat.format(new Date());
-    }
-
-    public static void makeToast(Context context, String message, int length) {
-        Toast.makeText(context, message, length).show();
     }
 
 }

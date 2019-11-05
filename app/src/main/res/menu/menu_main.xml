@@ -5,21 +5,21 @@
 
     <item
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_white_24dp"
+        android:icon="@drawable/ic_menu_search"
         android:orderInCategory="100"
         android:title="@string/action_search"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_archive"
-        android:icon="@drawable/ic_archive_white_24dp"
+        android:icon="@drawable/ic_menu_archive"
         android:orderInCategory="100"
         android:title="@string/action_archive"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings_white_24dp"
+        android:icon="@drawable/ic_menu_customer_support"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="ifRoom" />
