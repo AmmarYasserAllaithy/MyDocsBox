@@ -1,457 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_activity"
-    tools:context=".SettingsActivity">
+    tools:context=".ui.main.view.SettingsActivity">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/bs_padding">
 
-        <!-- Profile -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/colorPrimaryLight"
-            android:onClick="gotoProfile"
-            android:orientation="horizontal"
-            android:padding="@dimen/settings_item_padding_se">
 
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/doc_image_margin"
-                android:contentDescription="@string/no_image"
-                android:src="@drawable/ic_set_account_circle_100dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Ammar Yasser"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginBottom="5dp"
-            android:background="@color/colorPrimary" />
-
-        <!-- General -->
-        <LinearLayout style="@style/Settings_Group">
-
-            <TextView
-                style="@style/Settings_Group.Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/set_manage" />
-
-            <LinearLayout
-                style="@style/Settings_Row.Done"
-                android:onClick="manageBooks">
-
-                <ImageView
-                    style="@style/Settings_Item_Icon"
-                    android:src="@drawable/ic_set_book_48dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/Settings_Item_Key"
-                        android:text="@string/set_mng_books_key" />
-
-                    <TextView
-                        android:id="@+id/settings_books_no_tv"
-                        style="@style/Settings_Item_Value"
-                        android:text="@string/set_books_no" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/Settings_Row.Done"
-                android:onClick="manageTags">
-
-                <ImageView
-                    style="@style/Settings_Item_Icon"
-                    android:src="@drawable/ic_set_flag_48dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/Settings_Item_Key"
-                        android:text="@string/set_mng_tags_key" />
-
-                    <TextView
-                        android:id="@+id/settings_tags_no_tv"
-                        style="@style/Settings_Item_Value"
-                        android:text="@string/set_tags_no" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="5dp"
-            android:background="@color/colorPrimary" />
-
-        <!-- General -->
-        <LinearLayout style="@style/Settings_Group">
-
-            <TextView
-                style="@style/Settings_Group.Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/set_general" />
-
-            <LinearLayout
-                style="@style/Settings_Row.Done"
-                android:onClick="setLang">
-
-                <ImageView
-                    style="@style/Settings_Item_Icon"
-                    android:src="@drawable/ic_set_language_48dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/Settings_Item_Key"
-                        android:text="@string/set_gen_lang_key" />
-
-                    <TextView
-                        android:id="@+id/set_gen_lang"
-                        style="@style/Settings_Item_Value"
-                        android:text="@string/set_gen_lang_value" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/Settings_Row"
-                android:onClick="setDateFormat">
-
-                <ImageView
-                    style="@style/Settings_Item_Icon"
-                    android:src="@drawable/ic_set_today_48dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/Settings_Item_Key"
-                        android:text="@string/set_gen_date_key" />
-
-                    <TextView
-                        style="@style/Settings_Item_Value"
-                        android:text="@string/set_gen_date_value" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="5dp"
-            android:background="@color/colorPrimary" />
-
-        <!-- Appearance -->
-        <LinearLayout style="@style/Settings_Group">
-
-            <TextView
-                style="@style/Settings_Group.Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/set_appearance" />
-
-            <LinearLayout
-                style="@style/Settings_Row.Done"
-                android:onClick="setViewMode">
-
-                <ImageView
-                    style="@style/Settings_Item_Icon"
-                    android:src="@drawable/ic_set_view_list_48dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/Settings_Item_Key"
-                        android:text="@string/set_apr_view_key" />
-
-                    <TextView
-                        android:id="@+id/set_apr_view_mode"
-                        style="@style/Settings_Item_Value"
-                        android:text="@string/view_mode_compact" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/Settings_Row"
-                android:onClick="setTheme">
-
-                <ImageView
-                    style="@style/Settings_Item_Icon"
-                    android:src="@drawable/ic_set_color_lens_48dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/Settings_Item_Key"
-                        android:text="@string/set_apr_theme_key" />
-
-                    <TextView
-                        style="@style/Settings_Item_Value"
-                        android:text="@string/set_apr_theme_value" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/Settings_Row"
-                android:onClick="setFont">
-
-                <ImageView
-                    style="@style/Settings_Item_Icon"
-                    android:src="@drawable/ic_set_text_format_48dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/Settings_Item_Key"
-                        android:text="@string/set_apr_font_key" />
-
-                    <TextView
-                        style="@style/Settings_Item_Value"
-                        android:text="@string/set_apr_font_value" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="5dp"
-            android:background="@color/colorPrimary" />
-
-        <!-- Database -->
-        <LinearLayout style="@style/Settings_Group">
-
-            <TextView
-                style="@style/Settings_Group.Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/set_database" />
-
-            <TextView
-                style="@style/Settings_Row.TV.Done"
-                android:drawableStart="@drawable/ic_set_cloud_upload_48dp"
-                android:text="@string/set_db_backup"
-                android:onClick="backup" />
-
-            <!--            <LinearLayout-->
-            <!--                style="@style/Settings_Row.Done"-->
-            <!--                android:onClick="backup">-->
-
-            <!--                <ImageView-->
-            <!--                    style="@style/Settings_Item_Icon"-->
-            <!--                    android:src="@drawable/ic_set_cloud_upload_48dp" />-->
-
-            <!--                <LinearLayout-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="match_parent"-->
-            <!--                    android:orientation="vertical">-->
-
-            <!--                    <TextView-->
-            <!--                        style="@style/Settings_Item_Key"-->
-            <!--                        android:layout_height="match_parent"-->
-            <!--                        android:text="@string/set_db_backup" />-->
-
-            <!--                </LinearLayout>-->
-            <!--            </LinearLayout>-->
-
-            <TextView
-                style="@style/Settings_Row.TV.Done"
-                android:drawableStart="@drawable/ic_set_cloud_download_48dp"
-                android:text="@string/set_db_restore"
-                android:onClick="restore" />
-
-            <!--            <LinearLayout-->
-            <!--                style="@style/Settings_Row.Done"-->
-            <!--                android:onClick="restore">-->
-
-            <!--                <ImageView-->
-            <!--                    style="@style/Settings_Item_Icon"-->
-            <!--                    android:src="@drawable/ic_set_cloud_download_48dp" />-->
-
-            <!--                <LinearLayout-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="match_parent"-->
-            <!--                    android:orientation="vertical">-->
-
-            <!--                    <TextView-->
-            <!--                        style="@style/Settings_Item_Key"-->
-            <!--                        android:layout_height="match_parent"-->
-            <!--                        android:text="@string/set_db_restore" />-->
-
-            <!--                </LinearLayout>-->
-            <!--            </LinearLayout>-->
-
-            <LinearLayout
-                style="@style/Settings_Row"
-                android:onClick="autoBackup">
-
-                <ImageView
-                    style="@style/Settings_Item_Icon"
-                    android:src="@drawable/ic_set_cloud_done_48dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/Settings_Item_Key"
-                        android:text="@string/set_db_auto_backup_key" />
-
-                    <TextView
-                        style="@style/Settings_Item_Value"
-                        android:text="@string/set_db_auto_backup_value" />
-                </LinearLayout>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="5dp"
-            android:background="@color/colorPrimary" />
-
-        <!-- Contact -->
-        <LinearLayout style="@style/Settings_Group">
-
-            <TextView
-                style="@style/Settings_Group.Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/set_contact" />
-
-            <TextView
-                style="@style/Settings_Row.TV"
-                android:drawableStart="@drawable/ic_set_feedback_48dp"
-                android:text="@string/set_feedback"
-                android:onClick="feedback" />
-
-            <!--            <LinearLayout-->
-            <!--                style="@style/Settings_Row"-->
-            <!--                android:onClick="feedback">-->
-
-            <!--                <ImageView-->
-            <!--                    style="@style/Settings_Item_Icon"-->
-            <!--                    android:src="@drawable/ic_set_feedback_48dp" />-->
-
-            <!--                <LinearLayout-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="match_parent"-->
-            <!--                    android:orientation="vertical">-->
-
-            <!--                    <TextView-->
-            <!--                        style="@style/Settings_Item_Key"-->
-            <!--                        android:layout_height="match_parent"-->
-            <!--                        android:text="@string/set_feedback" />-->
-
-            <!--                </LinearLayout>-->
-            <!--            </LinearLayout>-->
-
-            <TextView
-                style="@style/Settings_Row.TV"
-                android:drawableStart="@drawable/ic_set_bug_report_48dp"
-                android:text="@string/set_report_bug"
-                android:onClick="reportBug" />
-
-            <!--            <LinearLayout-->
-            <!--                style="@style/Settings_Row"-->
-            <!--                android:onClick="reportBug">-->
-
-            <!--                <ImageView-->
-            <!--                    style="@style/Settings_Item_Icon"-->
-            <!--                    android:src="@drawable/ic_set_bug_report_48dp" />-->
-
-            <!--                <LinearLayout-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="match_parent"-->
-            <!--                    android:orientation="vertical">-->
-
-            <!--                    <TextView-->
-            <!--                        style="@style/Settings_Item_Key"-->
-            <!--                        android:layout_height="match_parent"-->
-            <!--                        android:text="@string/set_report_bug" />-->
-
-            <!--                </LinearLayout>-->
-            <!--            </LinearLayout>-->
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimary" />
-
-        <!-- About -->
-        <LinearLayout
+        <TextView
+            style="@style/Settings_Group.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/settings_margin"
-            android:onClick="gotoAbout"
-            android:orientation="horizontal">
+            android:text="@string/set_manage" />
 
-            <ImageView
-                style="@style/Settings_Item_Icon"
-                android:src="@drawable/ic_set_info_48dp" />
 
-            <TextView
-                style="@style/Settings_Item_Key"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/about_app"
-                android:textStyle="bold" />
+        <com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout
+            android:id="@+id/setting_books"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_set_book_48dp"
+            app:key="@string/set_mng_books_key"
+            app:value="@string/set_books_no" />
 
-        </LinearLayout>
+        <com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout
+            android:id="@+id/setting_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_set_flag_48dp"
+            app:key="@string/set_mng_tags_key"
+            app:value="@string/set_tags_no" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="8dp"
+            android:background="@color/colorPrimary" />
+
+
+        <TextView
+            style="@style/Settings_Group.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_general" />
+
+
+        <com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout
+            android:id="@+id/setting_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_set_language_48dp"
+            app:key="@string/set_gen_lang_key"
+            app:value="@string/set_gen_lang_value" />
+
+        <com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout
+            android:id="@+id/setting_date_format"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_set_today_48dp"
+            app:key="@string/set_gen_date_key"
+            app:value="@string/set_gen_date_value" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="8dp"
+            android:background="@color/colorPrimary" />
+
+
+        <TextView
+            style="@style/Settings_Group.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_appearance" />
+
+
+        <com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout
+            android:id="@+id/setting_view_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_set_view_list_48dp"
+            app:key="@string/set_apr_view_key"
+            app:value="@string/view_mode_compact" />
+
+        <com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout
+            android:id="@+id/setting_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_set_color_lens_48dp"
+            app:key="@string/set_apr_theme_key"
+            app:value="@string/set_apr_theme_value" />
+
+        <com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout
+            android:id="@+id/setting_font"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_set_text_format_48dp"
+            app:key="@string/set_apr_font_key"
+            app:value="@string/set_apr_font_value" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="8dp"
+            android:background="@color/colorPrimary" />
+
+
+        <TextView
+            style="@style/Settings_Group.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_database" />
+
+
+        <com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout
+            android:id="@+id/setting_backup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_set_cloud_upload_48dp"
+            app:key="@string/set_db_backup"
+            app:value="@string/last_backup" />
+
+        <com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout
+            android:id="@+id/setting_restore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_set_cloud_download_48dp"
+            app:key="@string/set_db_restore"
+            app:value="@string/last_restore" />
+
+
+        <com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout
+            android:id="@+id/setting_auto_backup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_set_cloud_done_48dp"
+            app:key="@string/set_db_auto_backup_key"
+            app:value="@string/set_db_auto_backup_value" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="8dp"
+            android:background="@color/colorPrimary" />
+
+
+        <TextView
+            style="@style/Settings_Group.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_contact" />
+
+
+        <com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout
+            android:id="@+id/setting_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_set_feedback_48dp"
+            app:key="@string/set_feedback"
+            app:value="@string/set_feedback_value" />
+
+        <com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout
+            android:id="@+id/setting_bug_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_set_bug_report_48dp"
+            app:key="@string/set_report_bug"
+            app:value="@string/set_report_bug_value" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="8dp"
+            android:background="@color/colorPrimary" />
+
+
+        <TextView
+            android:id="@+id/about_tv"
+            style="@style/Settings_Item_Key"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawablePadding="20dp"
+            android:padding="@dimen/settings_margin"
+            android:text="@string/about_app"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/ic_set_info_48dp" />
+
 
     </LinearLayout>
 </ScrollView>

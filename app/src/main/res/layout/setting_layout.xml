@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        tools:context=".ui.customviews.SettingLayout">
+
+        <ImageView
+            android:id="@+id/icon_iv"
+            style="@style/SettingLayoutView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="@string/no_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_set_book_48dp" />
+
+        <TextView
+            android:id="@+id/key_tv"
+            style="@style/SettingLayoutView.TV.Key"
+            tools:text="@string/set_mng_books_key" />
+
+        <TextView
+            android:id="@+id/value_tv"
+            style="@style/SettingLayoutView.TV"
+            app:layout_constraintTop_toBottomOf="@id/key_tv"
+            tools:text="@string/set_books_no" />
+
+        <!--    <TextView-->
+        <!--        android:id="@+id/test"-->
+        <!--        style="@style/SettingLayoutView.TV"-->
+        <!--        android:background="@color/colorAccent"-->
+        <!--        android:text="TEst TEst TEst TEst"-->
+        <!--        android:textColor="@color/white"-->
+        <!--        app:layout_constraintTop_toBottomOf="@id/value_tv"-->
+        <!--        tools:text="@string/set_books_no" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

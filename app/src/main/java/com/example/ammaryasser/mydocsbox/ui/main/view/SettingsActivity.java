@@ -1,8 +1,8 @@
 package com.example.ammaryasser.mydocsbox.ui.main.view;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.View;
 
@@ -26,12 +25,12 @@ import com.example.ammaryasser.mydocsbox.data.repository.TagRepository;
 import com.example.ammaryasser.mydocsbox.databinding.ActivitySettingsBinding;
 import com.example.ammaryasser.mydocsbox.databinding.ManageAddBinding;
 import com.example.ammaryasser.mydocsbox.databinding.ManageListBinding;
+import com.example.ammaryasser.mydocsbox.ui.customviews.SettingLayout;
 import com.example.ammaryasser.mydocsbox.ui.main.adapter.BookAdapter;
 import com.example.ammaryasser.mydocsbox.ui.main.adapter.TagAdapter;
 import com.example.ammaryasser.mydocsbox.ui.main.viewmodel.SettingsViewModel;
 import com.example.ammaryasser.mydocsbox.util.Prefs;
 import com.example.ammaryasser.mydocsbox.util.Prefs.Lang;
-import com.example.ammaryasser.mydocsbox.util.Prefs.ViewMode;
 import com.example.ammaryasser.mydocsbox.util.Utils;
 
 import java.util.Locale;
@@ -42,15 +41,19 @@ import static com.example.ammaryasser.mydocsbox.util.Prefs.getPrefs;
 @SuppressWarnings("ALL")
 public class SettingsActivity extends AppCompatActivity {
 
-    public static final String TAG = SettingsActivity.class.getSimpleName() + "TAG";
+    private static final String TAG = "SettingsActivityTAG";
     private static final int SELECT_DB_FILE_REQUEST = 1;
 
     private ActivitySettingsBinding binding;
 
     private Prefs prefs;
-    private Utils utils;
 
     private SettingsViewModel viewModel;
+
+    private enum Type {Books, Tags}
+
+    @StringRes
+    private static final int[] VIEW_MODES = {R.string.view_mode_compact, R.string.view_mode_informative};
 
 
     @Override
@@ -58,115 +61,116 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
-        binding.setLifecycleOwner(this);
         setContentView(binding.getRoot());
 
-        @SuppressLint("HardwareIds")
-        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        binding.username.setText(androidId);
-
         prefs = getPrefs(this);
-        utils = new Utils(this);
 
         viewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        setupListeners();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        viewModel.booksMLiveData.observe(this, books ->
-                binding.settingsBooksNoTv.setText(getString(R.string.set_books_no, books.size())));
+        viewModel.booksMLiveData.observe(this,
+                books -> binding.settingBooks.setValue(getString(R.string.set_books_no, books.size())));
 
-        viewModel.tagsMLiveData.observe(this, tags ->
-                binding.settingsTagsNoTv.setText(getString(R.string.set_tags_no, tags.size())));
+        viewModel.tagsMLiveData.observe(this,
+                tags -> binding.settingTags.setValue(getString(R.string.set_tags_no, tags.size())));
 
         viewModel.updateBooksMLiveData(this);
         viewModel.updateTagsMLiveData(this);
 
-        binding.setGenLang.setText(getString(R.string.set_gen_lang_value));
-        binding.setAprViewMode.setText(prefs.getViewMode() == ViewMode.COMPACT ? getString(R.string.view_mode_compact) : getString(R.string.view_mode_informative));
+        binding.settingLanguage.setValue(getString(R.string.set_gen_lang_value));
+        binding.settingViewMode.setValue(getString(VIEW_MODES[prefs.getViewMode()]));
     }
 
-//    @Override
-//    public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 //        Intent refresh = new Intent(this, MainActivity.class);
 //        refresh.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //        startActivity(refresh);
 //
 //        startActivity(new Intent(this, MainActivity.class));
-//    }
-
-
-    public void gotoProfile(View view) {
-        startActivity(new Intent(this, ProfileActivity.class));
     }
 
-    public void manageBooks(View view) {
-        showBooks();
+
+    /**
+     * Setting Click Listeners
+     */
+    private void setupListeners() {
+        binding.settingBooks.setOnSettingClicked(booksListener);
+        binding.settingTags.setOnSettingClicked(tagsListener);
+        binding.settingLanguage.setOnSettingClicked(languageListener);
+        binding.settingDateFormat.setOnSettingClicked(dateFormatListener);
+        binding.settingViewMode.setOnSettingClicked(viewModeListener);
+        binding.settingTheme.setOnSettingClicked(themeListener);
+        binding.settingFont.setOnSettingClicked(fontListener);
+        binding.settingBackup.setOnSettingClicked(backupListener);
+        binding.settingRestore.setOnSettingClicked(restoreListener);
+        binding.settingAutoBackup.setOnSettingClicked(autoBackupListener);
+        binding.settingFeedback.setOnSettingClicked(feedbackListener);
+        binding.settingBugReport.setOnSettingClicked(bugReportListener);
+
+        binding.aboutTv.setOnClickListener(v ->
+                startActivity(new Intent(this, AboutActivity.class)));
     }
 
-    public void manageTags(View view) {
-        showTags();
-    }
 
-    public void setLang(View view) {
+    private SettingLayout.SettingClickListener booksListener = () -> showDialog(Type.Books);
+
+    private SettingLayout.SettingClickListener tagsListener = () -> showDialog(Type.Tags);
+
+    private SettingLayout.SettingClickListener languageListener = () -> {
         setLocale(prefs.switchLang() == Lang.EN ? "en" : "ar");
+        finish();
         recreate();
-        binding.setGenLang.setText(getString(R.string.set_gen_lang_value));
-    }
+    };
 
-    public void setDateFormat(View view) {
-        utils.toast("Date Format");
-    }
+    private SettingLayout.SettingClickListener dateFormatListener = () -> toast(getString(R.string.set_gen_date_key));
 
-
-    @StringRes
-    private static final int[] VIEW_MODES = {R.string.view_mode_compact, R.string.view_mode_informative};
-
-    public void setViewMode(View view) {
-        binding.setAprViewMode.setText(getString(VIEW_MODES[prefs.switchViewMode()]));
+    private SettingLayout.SettingClickListener viewModeListener = () -> {
+        binding.settingViewMode.setValue(getString(VIEW_MODES[prefs.switchViewMode()]));
         onBackPressed();
-    }
+    };
+
+    private SettingLayout.SettingClickListener themeListener = () -> toast(getString(R.string.set_apr_theme_key));
+
+    private SettingLayout.SettingClickListener fontListener = () -> toast(getString(R.string.set_apr_font_key));
+
+    private SettingLayout.SettingClickListener backupListener = () -> {
+        // final String path = new BookDBHelper(this).backup(false);
+        // if (path != null) toast("DB Backup created Successfully\n" + path);
+        // else
+        toast(getString(R.string.coming_soon));
+    };
+
+    private SettingLayout.SettingClickListener restoreListener = () -> {
+        Intent restore = new Intent()
+                .setType("*/*")
+                .setAction(Intent.ACTION_GET_CONTENT);
+
+        startActivityForResult(
+                Intent.createChooser(restore, "Select DB File"),
+                SELECT_DB_FILE_REQUEST);
+    };
+
+    private SettingLayout.SettingClickListener autoBackupListener = () -> toast(getString(R.string.set_db_auto_backup_key));
+
+    private SettingLayout.SettingClickListener feedbackListener = () -> toast(getString(R.string.set_feedback));
+
+    private SettingLayout.SettingClickListener bugReportListener = () -> toast(getString(R.string.set_report_bug));
 
 
-    public void setTheme(View view) {
-        utils.toast("Theme");
-    }
-
-    public void setFont(View view) {
-        utils.toast("Font");
-    }
-
-    public void backup(View view) {
-//        final String path = new BookDBHelper(this).backup(false);
-//        if (path != null) utils.toast("DB Backup created Successfully\n" + path);
-//        else
-        utils.toast("Coming soon");
-    }
-
-    public void restore(View view) {
-        Intent restore = new Intent();
-        restore.setType("*/*");
-        restore.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(restore, "Select DB File"), SELECT_DB_FILE_REQUEST);
-    }
-
-    public void autoBackup(View view) {
-        utils.toast("Auto Backup");
-    }
-
-    public void feedback(View view) {
-        utils.toast("Feedback");
-    }
-
-    public void reportBug(View view) {
-        utils.toast("Report A Bug");
-    }
-
-    public void gotoAbout(View view) {
-        startActivity(new Intent(this, AboutActivity.class));
-    }
+    // TODO 04-Aug-21 :-> refactor
 
     public void setLocale(String lang) {
         Locale locale = new Locale(lang, lang.equals("ar") ? "EG" : "US");
@@ -194,10 +198,10 @@ public class SettingsActivity extends AppCompatActivity {
 //            if (backupPath.endsWith(DBHelper.DB_NAME)) {
 //
 //                if (new BookDBHelper(this).restore(backupPath))
-//                    utils.toast("DB Restored Successfully");
-//                else utils.toast("Restore Failed");
+//                    toast("DB Restored Successfully");
+//                else toast("Restore Failed");
 //
-//            } else utils.toast("Invalid Database File");
+//            } else toast("Invalid Database File");
         }
     }
 
@@ -218,60 +222,64 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    public void showBooks() {
-        showDialog("Books");
-    }
 
-    public void showTags() {
-        showDialog("Tags");
-    }
+    /**
+     * Dialogs
+     */
+    public void showDialog(final Type type) {
+        final ManageListBinding binding = ManageListBinding.inflate(getLayoutInflater());
 
-    public void showDialog(final String type) {
-        ManageListBinding binding = ManageListBinding.inflate(getLayoutInflater());
+        binding.manageTitle.setText(type.toString());
 
-        binding.manageTitle.setText(type);
+        if (type == Type.Books) configBookAdapter(binding);
+        else configTagAdapter(binding);
 
-        viewModel.updateBooksMLiveData(this);
-        viewModel.updateTagsMLiveData(this);
 
-        final BookAdapter bookAdapter = new BookAdapter();
-        final TagAdapter tagAdapter = new TagAdapter();
+        binding.getRoot().setOnClickListener(v -> {
+        });
 
-        bookAdapter.submitList(viewModel.booksMLiveData.getValue());
-        tagAdapter.submitList(viewModel.tagsMLiveData.getValue());
-
-        binding.manageRecyclerView.setAdapter(type.equals("Books") ? bookAdapter : tagAdapter);
-
-        new AlertDialog
-                .Builder(this)
-                .setView(binding.getRoot())
-                .setCancelable(false)
-                .setPositiveButton("Close", null)
-                .setNegativeButton("Add New", (dialog, which) -> {
-
-                    if (type.equalsIgnoreCase("Books")) showAddNew(getString(R.string.doc_book));
-                    else showAddNew(getString(R.string.doc_tag));
-                })
+        createDialog(
+                binding.getRoot(),
+                getString(R.string.cancel),
+                null,
+                getString(R.string.add_new),
+                (dialog, which) -> insert(type))
                 .show();
     }
 
-    public void showAddNew(final String type) {
-        ManageAddBinding binding = ManageAddBinding.inflate(getLayoutInflater());
+    public void configBookAdapter(ManageListBinding binding) {
+        viewModel.updateBooksMLiveData(this);
+
+        final BookAdapter adapter = new BookAdapter();
+
+        adapter.submitList(viewModel.booksMLiveData.getValue());
+        binding.manageRecyclerView.setAdapter(adapter);
+    }
+
+    public void configTagAdapter(ManageListBinding binding) {
+        viewModel.updateTagsMLiveData(this);
+
+        final TagAdapter adapter = new TagAdapter();
+
+        adapter.submitList(viewModel.tagsMLiveData.getValue());
+        binding.manageRecyclerView.setAdapter(adapter);
+    }
+
+    public void insert(final Type type) {
+        final ManageAddBinding binding = ManageAddBinding.inflate(getLayoutInflater());
 
         binding.manageAddHeader.setText(getString(R.string.m_add_new, type));
 
-        new AlertDialog
-                .Builder(this)
-                .setView(binding.getRoot())
-                .setCancelable(false)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Add", (dialog, which) -> {
-
-                    String title = binding.mAddTitle.getText().toString();
+        createDialog(
+                binding.getRoot(),
+                getString(R.string.cancel),
+                null,
+                getString(R.string.add),
+                (dialog, which) -> {
+                    final String title = binding.mAddTitle.getText().toString();
 
                     if (!title.matches("[ ]*") && title.length() < 64)
-
-                        if (type.equals(getString(R.string.doc_book))) insertBook(title);
+                        if (type == Type.Books) insertBook(title);
                         else insertTag(title);
                 })
                 .show();
@@ -279,18 +287,46 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void insertTag(String title) {
         TagRepository.getInstance(this).insertOrUpdate(new Tag(title)).subscribe(
-                id -> utils.toast("Added"),
-                throwable -> utils.toast("Can't Add Tag"));
+                id -> toast("Added"),
+                throwable -> toast("Can't Add Tag"));
 
         viewModel.updateTagsMLiveData(this);
     }
 
     private void insertBook(String title) {
         BookRepository.getInstance(this).insertOrUpdate(new Book(title)).subscribe(
-                id -> utils.toast("Added!"),
-                throwable -> utils.toast("Can't Add Book"));
+                id -> toast("Added!"),
+                throwable -> toast("Can't Add Book"));
 
         viewModel.updateBooksMLiveData(this);
+    }
+
+
+    private AlertDialog createDialog(
+            final View root,
+            final CharSequence negativeTxt,
+            final DialogInterface.OnClickListener negativeListener,
+            final CharSequence positiveTxt,
+            final DialogInterface.OnClickListener positiveListener
+    ) {
+        return new AlertDialog.Builder(this)
+                .setView(root)
+                .setCancelable(false)
+                .setNegativeButton(negativeTxt, negativeListener)
+                .setPositiveButton(positiveTxt, positiveListener)
+                .create();
+    }
+
+
+    /**
+     * Toast
+     */
+    private void toast(int resId) {
+        toast(getString(resId));
+    }
+
+    private void toast(String txt) {
+        Utils.toast(getApplicationContext(), txt);
     }
 
 }
